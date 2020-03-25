@@ -1,0 +1,26 @@
+#!/bin/sh
+
+export CLASSPATH=";trans2.jar;saxon8.jar;xquery.jar;xq2xml.jar"
+
+java -Xmx512M   net.sf.saxon.Transform XQTSCatalog.xml xq2xsltest.xsl
+# ./mkcat; java   net.sf.saxon.Transform mycat.xml xq2xsltest.xsl test="yes"
+
+exit
+
+cd  ReportingResults
+cp ../Results.xml .
+java -jar ../xgrammar/lib/ant.jar createboth
+
+
+
+exit
+You adjust memory through the Java Virtual Machine and the 
+usual parameters for Sun SDK 1.5 are:
+
+    -Xms<size>        set initial Java heap size
+    -Xmx<size>        set maximum Java heap size
+    -Xss<size>        set java thread stack size
+ 
+where size can be 512M, for example.
+
+You could start with -Xmx512M for example. 

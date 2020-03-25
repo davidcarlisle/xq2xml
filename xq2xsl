@@ -1,0 +1,17 @@
+#!/bin/bash
+
+
+# export CLASSPATH=";saxon8.jar;xquery.jar;xq2xml.jar"
+export CLASSPATH=";saxon8.jar;xquery.jar"
+
+java   net.sf.saxon.Transform -o xq2xsl.log  -it main xq2xsl.xsl xq=$1 dump="yes"
+if [ "$2" != q ]
+then
+cat $1
+echo ""
+echo === ${1/.xq/.xsl}
+# cat temp.xml
+cat ${1/.xq/.xsl}
+echo ===
+fi
+

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+export CLASSPATH=";saxon8.jar;xquery.jar"
+
+java   net.sf.saxon.Transform XQTSCatalog.xml xq2xqxtest.xsl  test="yes"
+# ./mkcat; java   net.sf.saxon.Transform mycat.xml xq2xqxtest.xsl test="yes"
+
+
+
+echo xsv
+
+export PATH=$PATH:/cygdrive/c/Program\ Files/XSV
+
+for i in xq2xqxtest-*.xml
+do
+echo $i
+xsv   $i xqueryx.xsd 2>&1 | grep -o  " instanceErrors=.[^0][^\"]*\"" 
+done
+echo done

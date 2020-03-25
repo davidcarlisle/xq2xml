@@ -1,0 +1,216 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Changes</title>
+      <link rel="stylesheet" type="text/css" href="xq2xmldoc.css">
+   </head>
+   <body>
+      <h1>Changes</h1>
+      <h2>Version date: 20061026</h2>
+      
+      <dl>
+         <dt><a name="chg20061026" id="chg20061026"></a>20061026
+         </dt>
+         <dd>XQTS 1.02 dev (from CVS) and add test harness to test supplied XQX files by transforming to XQuery then executing with xq2xsl</dd>
+         <dt><a name="chg20060822" id="chg20060822"></a>20060822
+         </dt>
+         <dd>XQTS 1.0</dd>
+         <dt><a name="chg20060816" id="chg20060816"></a>20060816
+         </dt>
+         <dd>Add namespace attribute to axsl:attribute (as previously done for axsl:element) (XSLT)</dd>
+         <dt><a name="chg20060811" id="chg20060811"></a>20060811
+         </dt>
+         <dd>Detect many more static errors and return correct codes (XSLT)</dd>
+         <dd>Improve interaction between boundary space and CDATA sections (XSLT,XQX)</dd>
+         <dd>Further fixes to namespace on computed elements (XSLT)</dd>
+         <dd>Use CVS access to development Test Suite</dd>
+         <dt><a name="chg20060711" id="chg20060711"></a>20060711 (unreleased)
+         </dt>
+         <dd>Default to stripping boundary space (XQX)</dd>
+         <dt><a name="chg20060705" id="chg20060705"></a>20060705
+         </dt>
+         <dd>Use xsl:text for CDATA sections so boundary space is not stripped (XSLT)</dd>
+         <dd>handle - in comments better (XSLT)</dd>
+         <dt><a name="chg20060627" id="chg20060627"></a>20060627 (unreleased)
+         </dt>
+         <dd>Add namespace attribute to xsl:element for computed constructor. (XSLT)</dd>
+         <dd>Omit xsl:fallback if no fallback expression in Query (XSLT)</dd>
+         <dd>add treat as expression to model as clause in quantified expressions (XSLT)</dd>
+         <dd>ParenthesizedExpr now translates to xqx:sequenceExpr not xqx:parenthesizedExpr (which will be removed from xqueryx) (XQX)</dd>
+         <dt><a name="chg20060614" id="chg20060614"></a>20060614
+         </dt>
+         <dd>Upgrade to new xqueryx.xsl and xqueryx.xsd as posted to bugzilla (XQX)</dd>
+         <dd>Upgrade to Test Suite 0.9.4</dd>
+         <dd>Undo reordering of Setter Declarations (no longer needed) (XQX)</dd>
+         <dd>Unravel special casing of first step in pathExpr to wrap in argExp (no longer needed) (XQX)</dd>
+         <dd>Do range checks "by hand" when faking xs:int and friends on a basic XSLT processor (XSLT)</dd>
+         <dd>Inprove conversion of quantified expressions involving type declaration (still not 100%) (XSLT)</dd>
+         <dd>Check for -- in comment constructors (not an error in XSLT) (XSLT)</dd>
+         <dt><a name="chg20060608" id="chg20060608"></a>20060608 (unreleased)
+         </dt>
+         <dd>Special case document() key() and current() to generate an error (pre-release of XQTS 0.94) (XSLT)</dd>
+         <dd>Special case FLWOR that starts with a let clause to keep the variable correctly scoped. (pre-release of XQTS 0.94) (XSLT)</dd>
+         <dt><a name="chg20060526" id="chg20060526"></a>20060526
+         </dt>
+         <dd>Upgrade to Saxon 8.7.1</dd>
+         <dd>Upgrade to Test Suite 0.9</dd>
+         <dd>Generate correct error codes in more cases (XSLT)</dd>
+         <dd>Several minor changes to namespace node usage on element constructors (XSLT)</dd>
+         <dd>Cause all Setter to come before other Prologue expressions (to be valid) (XQX)</dd>
+         <dt><a name="chg20060313" id="chg20060313"></a>20060313 (unreleased)
+         </dt>
+         <dd>Generate error for duplicated attributes (XSLT)</dd>
+         <dt><a name="chg20060302" id="chg20060302"></a>20060302
+         </dt>
+         <dd>Schema import for default namespace sets xpath-default-namespace (XSLT)</dd>
+         <dd>Generate error for $p at $p (XSLT)</dd>
+         <dd>Add "treat as" to xsl:variable in for-each clause to force sequence type matching (rather than the more relaxed xslt as= matching)
+            (ForExprType046.xq) (XSLT)
+         </dd>
+         <dd>force "?" to come after AtomicType, not before when converting a SingleType (XSLT)</dd>
+         <dd>Generate errors if declared XQuery version is not 1.0 or if there are 2 boundary space, copy namespace, construction mode,
+            ordering mode or default collation declarations (XSLT)
+         </dd>
+         <dd> use xsl:element name="{string(... to force QName to string, so xsl:element can interpret it as a QName... (ExpandedQNameConstructFunc001)
+            (XSLT)
+         </dd>
+         <dd>In scope variables may come from function declaration parameters as well as FLWOR etc (XSLT</dd>
+         <dt><a name="chg20060224" id="chg20060224"></a>20060224
+         </dt>
+         <dd>replace function ns of "" with non empty ns (function-declaration-025.xq) (XSLT)</dd>
+         <dd>fix empty order declaration (regressed since parser change) (XSLT)</dd>
+         <dd>catch two empty order declarations (emptyorderdecl-1) (XSLT)</dd>
+         <dd>Modify test stylesheets to cope with external variable tests (XQX,XSLT)</dd>
+         <dd>Make xsl:sort explictly default to codepoint collation (XSLT)</dd>
+         <dd>Upgrade to Saxon 8.7</dd>
+         <dt><a name="chg20060130" id="chg20060130"></a>20060130 (unreleased)
+         </dt>
+         <dd>Don't generate text nodes for text{()} (Constr-text-count-2) (XSLT)</dd>
+         <dt><a name="chg20060126" id="chg20060126"></a>20060126 (unreleased)
+         </dt>
+         <dd>Modify test harness to support module references (XSLT)</dd>
+         <dt><a name="chg20060108" id="chg20060108"></a>20060108
+         </dt>
+         <dd>Update to Test Suite 0.8.4</dd>
+         <dd>Detect error condition on empty URI literal in default namespace decln and module import. (XSLT)</dd>
+         <dd>Predeclare the xsi namespace. (XSLT)</dd>
+         <dd>Trap ?&gt; in PIs (an error in XQuery but not in XSLT) (XSLT)</dd>
+         <dd>Pick up XPath/XSLT switch functions in test attribute as well as select (XSLT)</dd>
+         <dt><a name="chg20051215" id="chg20051215"></a>20051215
+         </dt>
+         <dd>Add xq2xq and fullaxis stylesheets (XQ,FA)</dd>
+         <dt><a name="chg20051209" id="chg20051209"></a>20051209
+         </dt>
+         <dd>Modify code to defeat static analysis in typeswitch (as saxon 8.6.1 seems to have got smarter) (XSLT)</dd>
+         <dt><a name="chg20051208" id="chg20051208"></a>20051208 (unreleased)
+         </dt>
+         <dd>Update to Test Suite 0.8.2 and Saxon 8.6.1</dd>
+         <dd>Fix to BaseURI and namespace Decl to "unquote" strins (XQX)</dd>
+         <dd>Fix to "as" type declaration clause in let clause of FLWOR (XQX)</dd>
+         <dd>Fix typo to allow redclaration of xdt namespace prefix (XSLT)</dd>
+         <dd>Add code to avoid XSLT errors on xml namepsace declarations (XSLT)</dd>
+         <dt><a name="chg20051117" id="chg20051117"></a>20051117
+         </dt>
+         <dd>Add template for ModuleDecl/NCName, broken by November re-write (XQX)</dd>
+         <dt><a name="chg20051115" id="chg20051115"></a>20051115
+         </dt>
+         <dd>Abbreviated axis step defaults to attribute:: if step is an attribute() or schema-attribute() node test (XQX)</dd>
+         <dd>Declare the four tests with "Inspect" comparison as passes. (XSLT)</dd>
+         <dt><a name="chg20051110" id="chg20051110"></a>20051110
+         </dt>
+         <dd>Fix to pass in scope positional variables to functions when switching to XPath mode (XSLT).</dd>
+         <dd>W3C parser applet released!</dd>
+         <dt><a name="chg20051109" id="chg20051109"></a>20051109
+         </dt>
+         <dd>Given up waiting for the W3C Test Applet to be finally released: This page updated.</dd>
+         <dt><a name="chg20051107" id="chg20051107"></a>20051107 (unreleased)
+         </dt>
+         <dd>Update EBNF comments in xq2xsl to EBNF from CR draft. Results in some templates being re-ordered.</dd>
+         <dd>Document the new location for the XQuery parser applet distribution.</dd>
+         <dt><a name="chg20051103" id="chg20051103"></a>20051103 (unreleased)
+         </dt>
+         <dd>Update to Test Suite 0.8, change test harness for XSLT so that
+            Text Comparison is treated as Fragment (after clarification on
+            bugzilla).
+         </dd>
+         <dd>Update to Saxon 8.6: This allows me to get rid of all use of the 2005/04 namespaces.</dd>
+         <dt><a name="chg20051030" id="chg20051030"></a>20051030 (unreleased)
+         </dt>
+         <dd>Major restructuring for November parser which uses look ahead
+            rather than long tokens to disambiguate the Grammar productions.
+         </dd>
+         <dd>Many internal production names changed, and productions that
+            previously reported long tokens (typically a QName adjoined with some
+            white space and punctuation character) now report just the QName. Some
+            other restructuring of the parser output have taken place, for example
+            ForClause is now explictly reported (rather than being implied by the
+            reporting of the range variable.) This results in a simpler
+            stylesheet, but many changes, and this release no longer works with
+            older versions of the parser applet.
+         </dd>
+         <dd>The xq2xml class has been cleaned up by Scott, and renamed to Xq2xml
+            and included in the main xquery.jar. This means that the xq namespace
+            used for saxon extension functions is now java:Xq2xml rather than
+            java:xq2xml, and a separate xq2xml.jar file is no longer distributed or
+            required.
+         </dd>
+         <dd>The standard xquery parser applet now includes a built in XQuery
+            to XQueryX convertor, so in some ways xq2xqx is redundant, however I
+            continue to support it as a) I think it is useful to have a more
+            declarative description of the mapping between XQuery and XQueryX than
+            Java code, b) Xq2xml was there first, and it's a shame to throw it
+            away, c) There's no harm in giving people a choice. (A third XQuery to
+            XQueryX converter is also in use, and is being used by the XQuery Test
+            suite team to generate XQueryX versions of the test files.)
+         </dd>
+         <dt><a name="chg20051020" id="chg20051020"></a>20051020
+         </dt>
+         <dd>Update to test suite 0.7 (small changes to driver files required)</dd>
+         <dd>Fix to stable order by (XQX)</dd>
+         <dd>Regenerate the XQX zip file to have xq2xqx generated files rather than the files included in the 0.7 test suite release.</dd>
+         <dt><a name="chg20051012" id="chg20051012"></a>20051012
+         </dt>
+         <dd>Remove generation of xqx:boundarySpaceDecl (for bugzilla #2288)(XQX)</dd>
+         <dd>Separate out attributes and namespace declarations (for bugzilla #2260)(XQX)</dd>
+         <dd>Add error parameter to xq2xqx stylesheet and use this in xq2xqxtest so  that if the generated xqx needs to call error() it
+            uses a Qname specifying the expected error. (XQX)
+         </dd>
+         <dt><a name="chg20051003" id="chg20051003"></a>20051003
+         </dt>
+         <dd>Support redeclaring and undeclaring predefined namespaces (XSLT)</dd>
+         <dt><a name="chg20050928" id="chg20050928"></a>20050928
+         </dt>
+         <dd>Document handling of options and extensions (XSLT)</dd>
+         <dt><a name="chg20050927" id="chg20050927"></a>20050927
+         </dt>
+         <dd>Make .. expand to (the equivalent of) parent::node() not parent::* (XQX)</dd>
+         <dd>don't discard option declarations (XSLT)</dd>
+         <dt><a name="chg20050923" id="chg20050923"></a>20050923
+         </dt>
+         <dd>Add basic xslt built in types fudge for cast expressions, remove
+            it for instance of (XSLT).
+         </dd>
+         <dd>Fix typo in match patterns for preceding-sibling axis (XSLT)</dd>
+         <dd>Fix multiple variables in quantified expression (XQX and XSLT).</dd>
+         <dd>Support Validation expressions (XSLT).</dd>
+         <dt><a name="chg20050921" id="chg20050921"></a>20050921
+         </dt>
+         <dd>Documentation improvements.</dd>
+         <dt><a name="chg20050920" id="chg20050920"></a>20050920
+         </dt>
+         <dd>Documentation improvements.</dd>
+         <dd>Add xsltest zip file of XQuery test suite converted to XSLT.</dd>
+         <dt><a name="chg20050919" id="chg20050919"></a>20050919
+         </dt>
+         <dd>First release on <a href="http://monet.nag.co.uk/xq2xml">http://monet.nag.co.uk/xq2xml</a>.
+         </dd>
+      </dl>
+      
+      <hr>
+      <p><a href="index.html">xq2xml</a> is a personal project undertaken by David Carlisle (davidc "at" nag "dot" co "dot" uk).
+         It is however distributed with the knowledge of, and from a web site controlled by, my employer
+         <a href="http://www.nag.co.uk">NAG Ltd</a>.
+         
+      </p>
+   </body>
+</html>

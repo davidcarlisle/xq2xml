@@ -1,0 +1,25 @@
+#!/bin/sh
+
+
+export CLASSPATH=";saxon8.jar;xquery.jar"
+echo -n $1
+
+rm -f temp.xml $1x 
+java   net.sf.saxon.Transform -o xq2xqx.log  -it main xq2xqx.xsl xq=$1 dump="no$2" 
+
+# cat temp.xml
+# cat $1x 
+
+xsv -s xsv.xsl -o xsv.xml $1x  file:///c:/cygwin/xgrammar-llk-parser/xqueryx.xsd 
+echo -n " " `grep -o  instanceErrors=.[^0][^\"]*\" xsv.xml `
+echo ""
+
+
+java net.sf.saxon.Transform  -novw -o ${1}2 $1x  xqueryx.xsl
+
+
+echo ===
+cat $1
+echo
+echo "==="
+cat ${1}2

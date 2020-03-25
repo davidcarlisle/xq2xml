@@ -1,0 +1,11 @@
+
+  body {
+ background-color: white;
+}
+pre {
+ background-color: white;
+ padding: .5em .5em .5em .5em ;
+ border-width: thin;
+ border-style: solid;
+ border-color: black;
+}

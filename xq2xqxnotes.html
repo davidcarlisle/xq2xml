@@ -1,0 +1,35 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Notes on XQuery to XQueryX</title>
+      <link rel="stylesheet" type="text/css" href="xq2xmldoc.css">
+   </head>
+   <body>
+      <h1>Notes on XQuery to XQueryX</h1>
+      <h2>Version date: 20061026</h2>
+      
+      
+      <div id="s1">
+         <h2>1 Notes</h2>
+         
+         
+         <p>Currently if the input contains invalid syntax (as is,
+            intentionally, the case with several of the XQuery test suite files)
+            The convertor should still produce a valid XQueryX file, but
+            expressing a Query that just consists of a call to error().
+            The convertor has a parameter that allows an error code to be
+            specified in the case of an error, the xq2xsltext.xsl uses this
+            so that converted test sute files generate expected error calls
+            wherever possible.
+         </p>
+         
+      </div>
+      
+      <hr>
+      <p><a href="index.html">xq2xml</a> is a personal project undertaken by David Carlisle (davidc "at" nag "dot" co "dot" uk).
+         It is however distributed with the knowledge of, and from a web site controlled by, my employer
+         <a href="http://www.nag.co.uk">NAG Ltd</a>.
+         
+      </p>
+   </body>
+</html>

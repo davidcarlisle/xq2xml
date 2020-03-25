@@ -1,0 +1,646 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>XQ2XML: XML syntaxes for XQuery</title>
+      <link rel="stylesheet" type="text/css" href="xq2xmldoc.css">
+   </head>
+   <body>
+      <h1>XQ2XML: XML syntaxes for XQuery</h1>
+      <h2>Version date: 20061026</h2>
+      <div class="toc">
+         <h3>Contents</h3>
+         <ul>
+            <li><a href="#s1">1  Introduction</a></li>
+            <li><a href="#s2">2  XQ2XML: XQuery to XML</a></li>
+            <li><a href="#s3">3  XQ2XQX: XQuery to XQueryX</a></li>
+            <li><a href="#s4">4  XQ2XSL: XQuery to XSLT</a></li>
+            <li><a href="#s5">5  XQ2XQ: XQuery to XQuery</a></li>
+            <li><a href="#s6">6  FullAxis: XQuery to XQuery</a></li>
+            <li><a href="#s7">7  Files in the distribution</a></li>
+            <li><a href="#s8">8  Requirements</a></li>
+            <li><a href="#s9">9  Running the transforms</a></li>
+            <li><a href="#s10">10  Running the test suite</a></li>
+            <li><a href="#s11">11  Known bugs and other comments</a></li>
+         </ul>
+      </div>
+      
+      
+      <div id="s1">
+         <h2>1 Introduction</h2>
+         
+         <p>This distribution consists of a set of XSLT2 stylesheets to
+            manipulate XQuery Expressions and express the query using other
+            syntaxes. Currently stylesheets converting to XQueryX and XSLT are
+            supplied. Also stylesheets to transform Xquery expressions, firstly an identity transform and secondly a stylesheet to remove
+            any use of axes not supported in systems that do not implement the full axis feature of XQuery.
+         </p>
+         
+         <p>As XSLT requires XML input, or at least an XML view of non-XML
+            input, and XQuery does not use an XML syntax, the stylesheet
+            distribution is augmented by a Java based parser that parses an XQuery
+            expression (or in its most general form, a series of XQuery modules)
+            and returns an XML document. This parser is a trivial (10 or so line)
+            wrapper around the Java class provided by Scott Boag on behalf of the
+            the XQuery/XSLT working groups as part of the test parser applet
+            distribution. (Scott has kindly included this functionality now in the parser
+            distribution, so a separate wrapper is no longer needed).
+         </p>
+         
+         <p>The XQuery working group also provides an XQuery test suite, and
+            this distribution contains (for xq2xqx) a set of test files
+            converted to XQueryX syntax) and (for xq2xsl) a set of test files in XSLT syntax, and
+            a test report in the
+            official test report syntax for xq2xsl once coupled to an XSLT2
+            execution system (assumed to be Saxon8, for this release) considered as
+            a new implementation of XQuery. The stylesheets and
+            auxiliary Java code to process the test suite are also provided.
+         </p>
+         
+         
+         <p>
+            All code is under an Open Source Licence. All original XSLT
+            code, and the Java extension XQuery parser  are licenced under the
+            <a href="http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231">W3C Software Licence</a>.
+            A small Java Class (and its derived .jar file)
+            which are derived (essentially, copied) from Michael Kay's Saxon
+            source, are licenced under the <a href="http://www.mozilla.org/MPL/">Mozilla Public Licence</a>. Note this MPL
+            licenced code is only required to run the xq2xsl test suite, it is
+            not required to use xq2xsl or any other part of the distribution.
+            
+         </p>
+         
+      </div>
+      
+      
+      <div id="s2">
+         <h2>2 XQ2XML: XQuery to XML</h2>
+         
+         <p>Consider a simple XQuery Expression:</p>
+         <pre>
+  1 + 2
+</pre>
+         <p>The W3C parser applet produces the following output when parsing
+            the expression.
+         </p>
+         <pre>|XPath2
+| QueryList
+|    Module
+|       MainModule
+|          Prolog
+|          QueryBody
+|             Expr
+|                AdditiveExpr +
+|                   PathExpr
+|                      IntegerLiteral 1
+|                   PathExpr
+|                      IntegerLiteral 2
+Success!!!!</pre>
+         <p>This textual dump format is informative for a human reader, but
+            rather hard to process mechanically (especially as string literals
+            appear as a single token, so can cover multiple lines and contain
+            substring that look like this dump format.
+         </p>
+         
+         <p>The `Xq2xml class consists of a few lines of Java that changes 
+            the tree printing routine so that our test expression is now expressed
+            as XML:
+         </p>
+         <pre>
+  &lt;XPath2&gt;
+    &lt;QueryList&gt;
+      &lt;Module&gt;
+	&lt;MainModule&gt;
+	  &lt;Prolog/&gt;
+	  &lt;QueryBody&gt;
+	    &lt;Expr&gt;
+	      &lt;AdditiveExpr&gt;&lt;data&gt;+&lt;/data&gt;
+	      &lt;PathExpr&gt;
+		&lt;IntegerLiteral&gt;&lt;data&gt;1&lt;/data&gt;&lt;/IntegerLiteral&gt;
+	      &lt;/PathExpr&gt;
+	      &lt;PathExpr&gt;
+		&lt;IntegerLiteral&gt;&lt;data&gt;2&lt;/data&gt;&lt;/IntegerLiteral&gt;
+	      &lt;/PathExpr&gt;
+	      &lt;/AdditiveExpr&gt;
+	    &lt;/Expr&gt;
+	  &lt;/QueryBody&gt;
+	&lt;/MainModule&gt;
+      &lt;/Module&gt;
+    &lt;/QueryList&gt;
+  &lt;/XPath2&gt;
+</pre>
+         </div>
+      
+      <p>The exact XML vocabulary used isn't documented, as it is tied
+         closely to the internals of the Test parser applet, which in turn is
+         tied closely to the production names used in the XPath/XQuery Grammar
+         sources. Several of these names changed in September 2005 for example,
+         and even more changed in November 2005.  This release targets this
+         November 2005 applet (although much of it was developed for the
+         applets that accompanied the April and September 2005
+         specifications).
+      </p>
+      
+      <p>Once the XQuery expression is expressed as XML, XSLT can be used to
+         transform it to other, more formally defined, XML vocabularies.
+      </p>
+      
+      <div id="s3">
+         <h2>3 XQ2XQX: XQuery to XQueryX</h2>
+         
+         <p>The XQuery Specifications include the specification of an
+            alternative XML based syntax for XQuery, XQueryX. Conversion to
+            XQueryX is therefore an obvious first transformation to try.
+         </p>
+         
+         <p>Giving the above XML file as input to the xq2xqx.xsl stylesheet
+            results in the following output:
+         </p>
+         <pre>
+  &lt;xqx:module xmlns:xqx="http://www.w3.org/2005/XQueryX"&gt;
+    &lt;xqx:mainModule&gt;
+      &lt;xqx:queryBody&gt;
+	&lt;xqx:addOp&gt;
+	  &lt;xqx:firstOperand&gt;
+	    &lt;xqx:integerConstantExpr&gt;
+	      &lt;xqx:value&gt;1&lt;/xqx:value&gt;
+	    &lt;/xqx:integerConstantExpr&gt;
+	  &lt;/xqx:firstOperand&gt;
+	  &lt;xqx:secondOperand&gt;
+	    &lt;xqx:integerConstantExpr&gt;
+	      &lt;xqx:value&gt;2&lt;/xqx:value&gt;
+	    &lt;/xqx:integerConstantExpr&gt;
+	  &lt;/xqx:secondOperand&gt;
+	&lt;/xqx:addOp&gt;
+      &lt;/xqx:queryBody&gt;
+    &lt;/xqx:mainModule&gt;
+  &lt;/xqx:module&gt;
+</pre>
+         <p>Which does validate with the XQueryX schema provided as part of the
+            XQueryX specification.
+         </p>
+         
+         <p>The XQueryX specification also includes a normative XSLT 1.0
+            stylesheet that converts XQueryX to XQuery. In this case the
+            stylesheet produces:
+         </p>
+         <pre>(1+2)</pre>
+         <p>It is "obvious" that this Query is equivalent to our original query
+            (being the same apart from a redundant pair of parentheses). The
+            XQueryX specification consists (almost entirely) of several such "round
+            trip" examples. I believe it is a weakness of the specification that
+            the exact notion of equivalence used is unspecified. In the case of
+            non-trivial queries it isn't always obvious whether the XQueryX
+            produced by this (or any other) system is equivalent to the original
+            query, however I believe that xq2xqx preserves all aspects of any
+            valid original query. Some error conditions may change: an error should
+            still be reported but possibly a different error. Currently the system
+            always produces well formed XML, however if the parser applet reports a
+            parse error, the generated XQueryX encodes a call on the standard
+            function error().
+         </p>
+         
+         <p>Note that the above described the operation in two steps, First
+            making an XML file using the Xq2xml class, then using this file as
+            input to XSLT. Writing temporary files to the file system and (n
+            particular) starting the Java virtual machine more than necessary has
+            a considerable impact on performance so the stylesheet also provides
+            the option of passing the URI of the XQuery file directly to XSLT as a
+            parameter. Saxon's ability to use Java methods as XPath extension
+            functions is then used to invoke the Xq2xml parser prior to running
+            the transformation. Note that it is only this initialisation stage that
+            (optionally) uses Saxon specific extensions. The transformation itself
+            does not use any system-specific extensions.
+            
+         </p>
+         
+      </div>
+      
+      
+      <div id="s4">
+         <h2>4 XQ2XSL: XQuery to XSLT</h2>
+         
+         <p>The second transformation provided converts XQuery to XSLT.</p>
+         
+         <p>The initial parsing of the XQuery is as described in the previous
+            section. However the resulting XML is then transformed with xq2xsl.xsl
+            rather than xq2xqx.xsl which results in XSLT rather than XQueryX.
+            The simple test query above results in:
+            
+         </p>
+         <pre>
+  &lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+		  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		  xmlns:fn="http://www.w3.org/2005/xpath-functions"
+		  xmlns:local="http://www.w3.org/2005/XQuery-local-functions"
+		  xmlns:xq="java:Xq2xml"
+		  xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
+		  version="2.0"
+		  extension-element-prefixes="xq"
+		  exclude-result-prefixes="xq xs xdt local fn"&gt;
+    &lt;xsl:param name="input" as="item()" select="1"/&gt;
+    &lt;xsl:output indent="yes"/&gt;
+    &lt;xsl:template name="main"&gt;
+      &lt;xsl:for-each select="$input"&gt;
+	&lt;xsl:sequence select="( 1  +  2 )"/&gt;
+      &lt;/xsl:for-each&gt;
+    &lt;/xsl:template&gt;
+
+  &lt;/xsl:stylesheet&gt;
+</pre>
+         <p>Most of this is just standard boilerplate declaring some namespaces
+            that are predefined in XQuery but must be explicitly declared in XSLT.
+            The actual expression (which is also valid XPath in this case) appears
+            as the select  attribute to xsl:sequence.
+         </p>
+         
+         
+         <p>However not every XQuery consists of a single XPath expression, so
+            consider a slightly more complicated example:
+            
+         </p>
+         <pre>declare variable $x := &lt;a&gt; &lt;b&gt;zzz&lt;/b&gt; &lt;/a&gt;;
+$x/b
+</pre>
+         <p>This is converted to:</p>
+         <pre>
+  &lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+		  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		  xmlns:fn="http://www.w3.org/2005/xpath-functions"
+		  xmlns:local="http://www.w3.org/2005/XQuery-local-functions"
+		  xmlns:xq="java:Xq2xml"
+		  xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
+		  version="2.0"
+		  extension-element-prefixes="xq"
+		  exclude-result-prefixes="xq xs xdt local fn"&gt;
+    &lt;xsl:param name="input" as="item()" select="1"/&gt;
+    &lt;xsl:output indent="yes"/&gt;
+    &lt;xsl:variable name="x" as="item()*"&gt;
+      &lt;xsl:for-each select="$input"&gt;
+	&lt;xsl:element name="a"&gt;
+	  &lt;xsl:element name="b"&gt;
+	    &lt;xsl:text&gt;zzz&lt;/xsl:text&gt;
+	  &lt;/xsl:element&gt;
+	&lt;/xsl:element&gt;
+      &lt;/xsl:for-each&gt;
+    &lt;/xsl:variable&gt;
+    &lt;xsl:template name="main"&gt;
+      &lt;xsl:for-each select="$input"&gt;
+	&lt;xsl:sequence select="$x/ b "/&gt;
+      &lt;/xsl:for-each&gt;
+    &lt;/xsl:template&gt;
+
+  &lt;/xsl:stylesheet&gt;
+</pre>
+         <p>XQuery variable declarations and element constructors map naturally
+            to equivalent XSLT instructions. When a subexpression is required to
+            be evaluated as XPath rather than XSLT then (as before) xsl:sequence
+            is used to switch to XPath evaluation.
+         </p>
+         
+         
+         <p>The remaining complication is if the XQuery expression that is
+            being evaluated as XPath contains a sub expression that is mapped to
+            XSLT. XML (and XSLT)  rules mean that it is not possible to directly
+            embed the XSLT instructions in XPath. So in this case a function
+            definition is constructed to hold the XSLT sub expression, as in the
+            following example:
+         </p>
+         <pre>count((&lt;a/&gt;,1+2,&lt;b/&gt;))</pre>
+         <pre>
+  &lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+		  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		  xmlns:fn="http://www.w3.org/2005/xpath-functions"
+		  xmlns:local="http://www.w3.org/2005/XQuery-local-functions"
+		  xmlns:xq="java:Xq2xml"
+		  xmlns:xdt="http://www.w3.org/2005/xpath-datatypes"
+		  version="2.0"
+		  extension-element-prefixes="xq"
+		  exclude-result-prefixes="xq xs xdt local fn"&gt;
+    &lt;xsl:param name="input" as="item()" select="1"/&gt;
+    &lt;xsl:output indent="yes"/&gt;
+    &lt;xsl:template name="main"&gt;
+      &lt;xsl:for-each select="$input"&gt;
+	&lt;xsl:sequence select="count((xq:xpath_d1e27(.)))"/&gt;
+      &lt;/xsl:for-each&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:function name="xq:xpath_d1e27" as="item()*"&gt;
+      &lt;xsl:param name="xq:here"/&gt;
+      &lt;xsl:for-each select="$xq:here"&gt;
+	&lt;xsl:element name="a"/&gt;
+	&lt;xsl:sequence select="( 1  +  2 )"/&gt;
+	&lt;xsl:element name="b"/&gt;
+      &lt;/xsl:for-each&gt;
+    &lt;/xsl:function&gt;
+  &lt;/xsl:stylesheet&gt;
+</pre>
+         <p>These two techniques, switching from XPath to XSLT via a function call,and from XSLT to XPath via xsl:sequence allow the whole
+            of XQuery to be more or less directly mapped to XSLT in a simple manner. The two exceptions are typeswitch and "order by"
+            which do not have direct equivalents in XSLT. typeswitch is fairly simply mapped to an xsl:choose expression testing types
+            with the instance of operator. Order by is rather more complicated and the technique used will be documented elsewhere. Minor
+            discrepancies between default handling of namespaces and white space account for much of the complication in the code (and
+            probably most of any remaining bugs)
+         </p>
+         
+      </div>
+      
+      
+      <div id="s5">
+         <h2>5 XQ2XQ: XQuery to XQuery</h2>
+         
+         <p>The xq2xq.xsl stylesheet works in a similar way to the above stylesheets but outputs using the text method rather than xml,
+            and produces an XQuery equivalent to the input expression.
+            (Currently the result filename is formed by appending "3" to the end of the input file name, although that may change.)
+         </p>
+         
+         <p>This may not appear terribly useful but it could form the basis of an XQuery pretty-printer, although the current output format
+            isn't particularly pretty, and more importantly any comments in the original are dropped (as they are not reported by the
+            parser).
+         </p>
+         
+         <p>The real use of xq2xq is as an "Identity Transform" to be xsl:imported into stylesheets making transformations to Queries.
+            See the example in the next section.
+         </p>
+         
+      </div>
+      
+      
+      <div id="s6">
+         <h2>6 FullAxis: XQuery to XQuery</h2>
+         
+         <p>The stylesheet fullaxis.xsl is a small stylesheet that imports xq2xq.xsl and
+            adds a few simple templates to rewrite any use of the optional axes in
+            Xquery
+            (ancestor,ancestor-or-self,preceding,preceding-sibling,following,following-sibling). This
+            should be useful if you have to use a system that
+            inconveniences its users by not providing these axes.
+         </p>
+         
+         <p>Presumably there will be such systems as the Working Group have
+            gone to the trouble of making these axes optional, although not
+            supporting the axes would be a surprising choice for any implementor
+            as (as demonstrated here) removing the axes does not limit the
+            expressive power (so doesn't offer any new implementation strategies
+            as would perhaps be the case if path expressions were strictly limited
+            to forward searches). It just inconveniences the user by making them
+            type a more unwieldy expression (which is probably harder to optimise
+            as it is harder to spot a general expression than the restricted form
+            of an axis. This stylesheet can't help with the optimisation (or lack
+            thereof) but does at least produce an equivalent expression.
+         </p>
+         
+         <p>So for example:</p>
+         <pre>
+$y/preceding::*[2]/string(@i)
+</pre>
+         <p>is rewritten to:</p>
+         <pre>
+  $y/
+(let $here := . return
+   reverse(root()/descendant::*[. &lt;&lt; $here][not(descendant::node()[. is $here])]))
+[2]/string(@i)
+</pre>
+         </div>
+      
+      
+      <div id="s7">
+         <h2>7 Files in the distribution</h2>
+         
+         
+         <p>Note that only the first zip file is really required. The XQueryX test files contained in the second and third zip files may
+            be generated locally by running xq2xqxtest and xq2xsltest respectively, and all the other files are contained in the zip archive.
+         </p>
+         
+         
+         <dl>
+            
+            <dt><a href="xq2xml-20061026.zip">xq2xml-20061026.zip</a></dt>
+            <dd>zip file of full distribution (except xqx test files).</dd>
+            
+            <dt><a href="xqxtest-20061026.zip">xqxtest-20061026.zip</a></dt>
+            <dd>XQuery Test Files in XQueryX syntax.</dd>
+            
+            <dt><a href="xsltest-20061026.zip">xsltest-20061026.zip</a></dt>
+            <dd>XQuery Test Files in XSLT syntax.</dd>
+            
+            
+            
+            
+            <dt><a href="trans2.jar">trans2.jar</a></dt>
+            <dd>Jar file containing extension functions used in XQuery Test suite harness. (MPL)</dd>
+            
+            <dt><a href="trans2.java">trans2.java</a></dt>
+            <dd>Source file for trans2.jar (MPL)</dd>
+            
+            
+            
+            <dt><a href="xq2xqx">xq2xqx</a></dt>
+            <dd>shell script to run xq2xqx, generates an XQueryX document from an XQuery file.</dd>
+            
+            <dt><a href="xq2xqx.bat">xq2xqx.bat</a></dt>
+            <dd>Windows command version of xq2xqx.</dd>
+            
+            <dt><a href="xq2xqx.xsl">xq2xqx.xsl</a></dt>
+            <dd>The stylesheet to generate XQueryX</dd>
+            
+            <dt><a href="xq2xqxtest">xq2xqxtest</a></dt>
+            <dd>shell script to run xq2xqxtest, generates an XQuery test suite report.</dd>
+            
+            <dt><a href="xq2xqxtest.bat">xq2xqxtest.bat</a></dt>
+            <dd>Windows command version of xq2xqxtest.</dd>
+            
+            <dt><a href="xq2xqxtest.xsl">xq2xqxtest.xsl</a></dt>
+            <dd>XSLT stylesheet (using saxon extension functions) to generate XQueryX versions of the XQuery Test suite files.</dd>
+            
+            <dt><a href="xq2xsl">xq2xsl</a></dt>
+            <dd>shell script to run xq2xsl, generates an XSLT stylesheet from an XQuery file.</dd>
+            
+            <dt><a href="xq2xsl.bat">xq2xsl.bat</a></dt>
+            <dd>Windows command version of xq2xsl.</dd>
+            
+            <dt><a href="xq2xsl.xsl">xq2xsl.xsl</a></dt>
+            <dd>The stylesheet to generate XSLT.</dd>
+            
+            <dt><a href="xq2xsltest">xq2xsltest</a></dt>
+            <dd>shell script to run xq2xsltest, generates an XQuery test suite report.</dd>
+            
+            <dt><a href="xq2xsltest.bat">xq2xsltest.bat</a></dt>
+            <dd>Windows command version of xq2xsltest.</dd>
+            
+            <dt><a href="xq2xsltest.xsl">xq2xsltest.xsl</a></dt>
+            <dd>XSLT stylesheet (using saxon extension functions) to run the XQuery Test suite for xq2xsl</dd>
+            
+            <dt><a href="xqx2xsltest.xsl">xqx2xsltest.xsl</a></dt>
+            <dd>XSLT stylesheet (using saxon extension functions) to run the XQueryX Test suite for xq2xsl</dd>
+            
+            <dt><a href="XQTSReport.html">XQTSReport.html</a></dt>
+            <dd>Test Report for xq2xsl considered as an XQuery implementation (using Saxon8b to execute the derived XSLT). This is generated
+               by the standard report generator provided as part of the XQuery test suite.
+            </dd>
+            
+            <dt><a href="xq2xslresults.xml">xq2xslresults.xml</a></dt>
+            <dd>XML source for XQTSReport.html (this is generated by the xq2xsl script).</dd>
+            
+            <dt><a href="xq2xq.xsl">xq2xq.xsl</a></dt>
+            <dd>XSLT stylesheet implementing an identity transform on Xquery expressions.</dd>
+            
+            <dt><a href="fullaxis.xsl">fullaxis.xsl</a></dt>
+            <dd>XSLT stylesheet implementing a rewrite removing references to optional XQuery Axes.</dd>
+            
+            <dt><a href="index.html">index.html</a></dt>
+            <dd>This file.</dd>
+            
+            <dt><a href="xq2xmldoc.css">xq2xmldoc.css</a></dt>
+            <dd>CSS Styling for documentation.</dd>
+            
+         </dl>
+         
+         
+      </div>
+      
+      
+      <div id="s8">
+         <h2>8 Requirements</h2>
+         
+         <p>The stylesheets require the <a href="http://www.w3.org/2005/qt-applets/xgrammar.zip">XQuery parser</a> available from the XQuery/XSLT Working groups' 
+            Grammar Test page,
+            <a href="http://www.w3.org/2005/qt-applets/xqueryApplet.html">http://www.w3.org/2005/qt-applets/xqueryApplet.html</a>. 
+         </p>
+         
+         <p>This version requires the November 2005 parser designed to work wuth the XQuery CR release. xq2xml will no longer work with
+            earlier versions of the parser applet.
+         </p>
+         
+         
+         <p>An XSLT 2.0 processor is also required. In principle any XSLT system
+            should be usable with xq2xml, but in practice the supplied scripts
+            assume Saxon will be used, Saxon is available from <a href="http://saxon.sourceforge.net/">http://saxon.sourceforge.net/</a>.
+            (See also <a href="http://www.saxonica.com">http://www.saxonica.com</a>.)
+         </p>
+         
+         
+         <p>The XQueryX transformation optionally validates the output using
+            XSV available from <a href="http://www.ltg.ed.ac.uk/~ht/xsv-status.html">http://www.ltg.ed.ac.uk/~ht/xsv-status.html</a>.
+            This is only a checking stage and is not required for the
+            transformation. It would not be required if a schema-aware XSLT engine
+            were used for the transformation (In which case validation of the
+            result could be specified in the stylesheet) or if you trust the
+            system not to generate invalid XQueryX.
+         </p>
+         
+      </div>
+      
+      
+      <div id="s9">
+         <h2>9 Running the transforms</h2>
+         
+         <p>Many of the scripts/batch files in the distribution set a CLASSPATH
+            variable before calling java. As distributed it assumes that the
+            required .jar files are all in the current directory. You may need to
+            edit this to refer to the full paths suitable for your environment.
+         </p>
+         
+         
+         <div id="s9.1">
+            <h3>9.1 XQuery to XQueryX</h3>
+            
+            <p>To covert an XQuery expression to XQueryX, you just need to execute
+               the xq2xqx.xsl stylesheet, starting at the initial template "main" and
+               supplying the URI of the XQuery file as the parameter
+               "xq". Alternatively you can execute the script xq2xqx, supplying the
+               file name of the XQuery file as its first argument. This will run the
+               xq2xqx.xsl stylesheet generating the XQueryX file in a file with the
+               same name with appended "x" (so an input of test.xq will generate the
+               XQueryX document test.xqx. The resulting document is then validated
+               (using xsv) and converted to XQuery (using a filename formed by
+               appending "2" to the original name) using the normative XQueryX to
+               XQuery stylesheet supplied as part of the XQueryX specification.
+            </p>
+            
+         </div> 
+         
+         
+         <div id="s9.2">
+            <h3>9.2 XQuery to XSLT</h3>
+            
+            <p>To covert an XQuery expression to XSLT, you just need to execute
+               the xq2xsl.xsl stylesheet, starting at the initial template "main" and
+               supplying the URI of the XQuery file as the parameter
+               "xq". Alternatively you can execute the script xq2xsl, supplying the
+               file name of the XQuery file as its first argument. This will run the
+               xq2xsl.xsl stylesheet generating the XSLT file in a file with name
+               formed by omitting any trailing ".xq" from the original file name,
+               and then appending ".xsl".
+            </p>
+            
+            <p>Executing the generated stylesheet, starting at the template main should then be equivalent to executing the original Query.</p>
+            
+         </div> 
+         
+      </div>
+      
+      
+      
+      <div id="s10">
+         <h2>10 Running the test suite</h2>
+         
+         <p>The xq2xqxtest script will execute the xq2xqxtest.xsl stylesheet on
+            the file XQTSCatalog.xml which is supplied as part of the W3C XQuery
+            test suite.
+         </p>
+         
+         <p>The transform will generate an XQueryX file for each input file
+            used by the test suite, as a test the generated file is converted back
+            to XQuery using the normative stylesheet, and then compared with the
+            original string after some textual normalisation.
+         </p>
+         
+         <p>For each group of test files the stylesheet produces an XML
+            document that includes all the XQueryX test files in the group, This
+            allows the files to be validated. (Code to validate these documents
+            with XSV is commented out.)
+         </p>
+         
+         
+         <p>The xq2xsltest script executes the xq2xsltest.xsl stylesheet this
+            uses some small java extension functions to allow Saxon to translate
+            the test queries to xslt and then execute the generated queries and
+            compare results to the supplied expected results in the test suite
+            distribution.  The generated XSLT files are also written out to the
+            filesystem. After this stylesheet has been executed, a second
+            stylesheet supplied as part of the Test Suite distribution is executed
+            which generates an <a href="XQTSReport.html">HTML Report</a> in the
+            format specified by the working groups.
+         </p>
+         
+      </div>
+      
+      
+      <div id="s11">
+         <h2>11 Known bugs and other comments</h2>
+         
+         <p><a href="xq2xmlnotes.html">XQuery to XML</a></p>
+         
+         
+         <p><a href="xq2xqxnotes.html">XQuery to XQueryX</a></p>
+         
+         
+         <p><a href="xq2xslnotes.html">XQuery to XSLT</a></p>
+         
+         
+         
+         
+         <p><a href="changenotes.html">Changes</a></p>
+         
+         
+         
+      </div>
+      
+      <hr>
+      <p><a href="index.html">xq2xml</a> is a personal project undertaken by David Carlisle (davidc "at" nag "dot" co "dot" uk).
+         It is however distributed with the knowledge of, and from a web site controlled by, my employer
+         <a href="http://www.nag.co.uk">NAG Ltd</a>.
+         
+      </p>
+   </body>
+</html>
